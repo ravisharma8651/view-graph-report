@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>chart graph</title>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+  
+ </head>
+ <body>
+  <br /><br />
+  <div class="container" style="width:795px;">
+   <h2 align="center">Veiw Graph Report</h2>
+   <div id="div_filter" style="display: none">
+        <div class="col-sm-3 my-inp">
+            <label>From Date:</label>
+            <input name="put your address here (this differ from other)" type="text" autocomplete="off" id="txtfromdate" class="form-control hasDatepicker">
+            
+        </div>
+        <div class="col-sm-3 my-inp">
+            <label>To Date:</label>
+            <input name="put your address here (this differ from other)" type="text" autocomplete="off" id="txttodate" class="form-control hasDatepicker">
+            
+            <span id="put your address here (this differ from other)" style="color:Red;visibility:hidden;">*Invalid Data</span>
+        </div>
+
+    </div>
+   <br /><br />
+   <div id="chart"></div>
+  </div>
+ </body>
+</html>
+<?php 
+include("includes/db.php");
+$connect = mysqli_connect("localhost", "root", "", "ecom");
+$query = "SELECT * FROM account";
+$result = mysqli_query($connect, $query);
+$chart_data = '';
+while($row = mysqli_fetch_array($result))
+{
+ $chart_data .= "{ year:'".$row["year"]."', profit:".$row["profit"].", purchase:".$row["purchase"].", sale:".$row["sale"]."}, ";
+}
+$chart_data = substr($chart_data, 0, -2);
+?>
+ 
+ 
+<script>
+Morris.Bar({
+  element: 'chart',
+  data: [<?php echo $chart_data; ?>],
+  
+  xkey: 'year',
+  ykeys: ['profit', 'purchase', 'sale'],
+  labels: ['profit', 'purchase', 'sale'],
+  stacked: true
+});
+
+</script>
